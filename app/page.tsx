@@ -1,7 +1,10 @@
+import BookList from "./components/BookList";
+
 export default function Home() {
   return (
-    <main>
-      <h2>Hello World!</h2>
-    </main>
+    <div>
+      <h1>Home</h1>
+      <BookList />
+    </div>
   )
 }

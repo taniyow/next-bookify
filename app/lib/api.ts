@@ -1,9 +1,10 @@
+// lib/api.ts
 import { supabase } from './supabaseClient';
 
-export const fetchBooks = async () => {
+export async function fetchBooks() {
   const { data, error } = await supabase
     .from('books')
-    .select('*');
+    .select();
 
   if (error) {
     throw new Error(error.message);

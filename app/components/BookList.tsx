@@ -64,33 +64,33 @@ export default function BookList() {
   if (isLoading) return <div>Loading...</div>;
 
   return (
-    <div className="flex flex-col gap-2 w-1/2">
+    <div className="flex flex-col gap-2 w-full lg:w-1/2">
       <button 
         onClick={() => setAddModalOpen(true)}
         className="p-2 bg-blue-500 text-white rounded mx-auto"
       >
         Add Book
       </button>
-      <h2 className="text-lg font-semibold">List of Books Available</h2>
+      <h2 className="text-lg font-semibold text-center lg:text-left mt-5">List of Books Available</h2>
       <div className="flex flex-col gap-2">
         {books?.map((book) => (
           <div key={book.id} className="p-4 border rounded-lg flex flex-row justify-between">
-            <div>
+            <div className="w-[70%] lg:w-auto">
               <h3 className="text-lg font-medium">{book.title}</h3>
               <p className="text-sm text-gray-500">by {book.author}</p>
               <p className="text-sm text-gray-400">{formatDate(book.publishedDate)}</p>
               <p className="text-sm text-gray-400">{book.genre}</p>
             </div>
-            <div>
+            <div className="w-[30%] lg:w-auto">
               <button 
                 onClick={() => { setModalOpen(true); setBookToEdit(book); }} 
-                className="p-2 bg-yellow-500 text-white rounded m-2"
+                className="w-[5rem] p-2 bg-yellow-500 text-white rounded m-2"
               >
                 Update
               </button>
               <button 
                 onClick={() => deleteBookById(book.id)} 
-                className="p-2 bg-red-500 text-white rounded m-2"
+                className="w-[5rem] p-2 bg-red-500 text-white rounded m-2"
               >
                 Delete
               </button>

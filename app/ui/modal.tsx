@@ -15,7 +15,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, closeModal, title, children }) =>
     >
       <div className="flex items-center justify-center min-h-screen">
         <div 
-          className="bg-white p-10 rounded-lg relative w-1/3"
+          className="bg-white p-10 rounded-lg relative w-[90%] lg:w-1/3"
           onClick={(e) => e.stopPropagation()}
         >
           <button 

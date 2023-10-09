@@ -11,7 +11,7 @@ export default function MenuTabs({ tabs, children }: MenuTabsProps) {
   const [selectedTab, setSelectedTab] = useState(0);
 
   return (
-    <div className="w-full my-8 rounded-lg overflow-hidden">
+    <div className="w-full lg:w-1/2 my-8 rounded-lg overflow-hidden">
       <div className="flex flex-row items-center justify-center bg-white">
         {tabs.map((tab, index) => (
           <div

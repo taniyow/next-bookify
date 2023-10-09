@@ -74,7 +74,7 @@ export default function BookList() {
   if (error) return <></>;
 
   return (
-    <div className="flex flex-col gap-2 w-full lg:w-1/2 lg:mx-auto">
+    <div className="flex flex-col gap-2 w-full lg:mx-auto">
       <button 
         onClick={() => setAddModalOpen(true)}
         className="p-2 bg-blue-500 text-white rounded mx-auto"

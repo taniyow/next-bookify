@@ -1,6 +1,7 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { Book } from '../lib/api';
+import useFormattedDate from "../hooks/useFormattedDate";
 
 type Props = {
   initialBookData: Book;
@@ -9,10 +10,14 @@ type Props = {
 
 export default function UpdateBookForm({ initialBookData, onUpdate }: Props) {
   const [updatedBook, setUpdatedBook] = useState<Book>(initialBookData);
+  const formattedDate = useFormattedDate(initialBookData.publishedDate); 
 
   useEffect(() => {
-    setUpdatedBook(initialBookData);
-  }, [initialBookData]);
+    setUpdatedBook({
+      ...initialBookData,
+      publishedDate: formattedDate
+    });
+  }, [initialBookData, formattedDate]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

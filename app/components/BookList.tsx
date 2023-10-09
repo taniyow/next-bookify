@@ -74,7 +74,7 @@ export default function BookList() {
   if (error) return <></>;
 
   return (
-    <div className="flex flex-col gap-2 w-full lg:w-1/2">
+    <div className="flex flex-col gap-2 w-full lg:w-1/2 lg:mx-auto">
       <button 
         onClick={() => setAddModalOpen(true)}
         className="p-2 bg-blue-500 text-white rounded mx-auto"
@@ -95,14 +95,14 @@ export default function BookList() {
               <button 
                 onClick={() => { setUpdateModalOpen(true); setBookToEdit(book); }} 
                 disabled={isLoadingUpdate} 
-                className="w-[5rem] p-2 bg-green-500 text-white rounded m-2"
+                className="w-[4.5rem] lg:w-[5rem] p-2 bg-green-500 text-white text-[12px] lg:text-[16px] rounded m-2"
               >
                 {isLoadingUpdate ? 'Loading...' : 'Update'}
               </button>
               <button 
                 onClick={() => deleteBookById(book.id)} 
                 disabled={isLoadingDelete} 
-                className="w-[5rem] p-2 bg-red-500 text-white rounded m-2"
+                className="w-[4.5rem] lg:w-[5rem] p-2 bg-red-500 text-white text-[12px] lg:text-[16px] rounded m-2"
               >
                 {isLoadingDelete ? 'Loading...' : 'Delete'}
               </button>

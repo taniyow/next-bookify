@@ -5,10 +5,11 @@ import useFormattedDate from "../hooks/useFormattedDate";
 
 type Props = {
   initialBookData: Book;
+  isLoading: boolean;
   onUpdate: (updatedBook: Book) => void;
 };
 
-export default function UpdateBookForm({ initialBookData, onUpdate }: Props) {
+export default function UpdateBookForm({ initialBookData, isLoading, onUpdate }: Props) {
   const [updatedBook, setUpdatedBook] = useState<Book>(initialBookData);
   const formattedDate = useFormattedDate(initialBookData.publishedDate); 
 
@@ -30,7 +31,7 @@ export default function UpdateBookForm({ initialBookData, onUpdate }: Props) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mb-4">
+    <form onSubmit={handleSubmit}>
       <div className="mb-2">
         <input
           type="text"
@@ -71,7 +72,7 @@ export default function UpdateBookForm({ initialBookData, onUpdate }: Props) {
         />
       </div>
       <button type="submit" className="p-2 mt-4 bg-green-500 text-white rounded">
-        Update Book
+        {isLoading ? 'Updating...' : 'Update Book'}
       </button>
     </form>
   )

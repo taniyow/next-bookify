@@ -1,5 +1,4 @@
 import { supabase } from './supabaseClient';
-import { useBookStore } from "../utils/bookStore";
 
 export interface Book {
   id: number;
@@ -31,10 +30,6 @@ export const addBook = async (book: Omit<Book, 'id'>): Promise<any> => {
   
   if (error) {
     throw new Error(error.message);
-  }
-
-  if (data) {
-    useBookStore.getState().addBook(data[0]);
   }
 
   return data;

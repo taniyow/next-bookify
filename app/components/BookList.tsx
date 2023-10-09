@@ -27,14 +27,10 @@ export default function BookList() {
   const [isLoadingUpdate, setLoadingUpdate] = useState(false);
   const [isLoadingDelete, setLoadingDelete] = useState(false);
 
-  console.log('Data:', data);
-  console.log('Error:', error);
-
   const handleAddBook = async (newBook: Omit<Book, 'id'>) => {
     setLoadingAdd(true);
     try {
       await addBook(newBook);
-      await fetchBooks();
       setAddModalOpen(false);
     } catch (error) {
       console.error("An error occurred while adding the book:", error);
@@ -47,7 +43,6 @@ export default function BookList() {
     if (bookToEdit) {
       try {
         await updateBook(bookToEdit.id, updatedBook);
-        await fetchBooks();
         setUpdateModalOpen(false);
       } catch (error) {
         console.error("An error occurred while updating the book:", error);
@@ -72,6 +67,7 @@ export default function BookList() {
       // Update state with fetched books
       useBookStore.setState({ books: data });
     }
+    console.log('Data:', data);
   }, [data]);
 
   if (isLoading) return <div>Loading...</div>;

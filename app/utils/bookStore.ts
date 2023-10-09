@@ -37,30 +37,42 @@ export const useBookStore = create<BookState>((set, get) => ({
   },
 
   addBook: async (book) => {
+    set((state) => ({ books: [...state.books, book] }));
     try {
       await addBookApi(book);
-      get().fetchBooks(); // refresh the book list after adding a new one
     } catch (error) {
       console.error("An error occurred while adding the book:", error);
+      // Roll back on failure by removing the last added book
+      set((state) => ({ books: state.books.slice(0, -1) }));
     }
   },
 
   updateBook: async (id, updatedData) => {
+    // Cache the current state of books
+    const currentBooks = get().books;
+    // Optimistically update the local state
+    const updatedBooks = currentBooks.map(book => book.id === id ? { ...book, ...updatedData } : book);
+    set({ books: updatedBooks });
     try {
-      const updatedBook = await updateBookApi(id, updatedData);
-      const updatedBooks = get().books.map(book => book.id === id ? updatedBook : book);
-      set({ books: updatedBooks });
+      await updateBookApi(id, updatedData);
     } catch (error) {
       console.error("An error occurred while updating the book:", error);
+      // Roll back on failure by reverting to the cached state
+      set({ books: currentBooks });
     }
-  },  
+  },
 
   deleteBook: async (id: number) => {
+    // Cache the current book list
+    const currentBooks = get().books;
+    // Optimistically remove the book from the local state
+    set({ books: currentBooks.filter(book => book.id !== id) });
     try {
       await deleteBookApi(id);
-      get().fetchBooks(); // refresh the book list after deleting
     } catch (error) {
       console.error("An error occurred while deleting the book:", error);
+      // Roll back on failure by reverting to the previous state
+      set({ books: currentBooks });
     }
   },
 }));

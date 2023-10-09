@@ -9,10 +9,12 @@ export interface Book {
   genre: string;
 }
 
+// Fetch all books (READ)
 export const fetchBooks = async (): Promise<Book[]> => {
   const { data, error } = await supabase
     .from('books')
-    .select('*');
+    .select('*')
+    .order('id', { ascending: true });
 
   if (error) {
     throw new Error(error.message);
@@ -21,6 +23,7 @@ export const fetchBooks = async (): Promise<Book[]> => {
   return data as Book[];
 }
 
+// Add a new book (CREATE)
 export const addBook = async (book: Omit<Book, 'id'>): Promise<any> => {
   const { data, error } = await supabase
     .from('books')
@@ -32,6 +35,34 @@ export const addBook = async (book: Omit<Book, 'id'>): Promise<any> => {
 
   if (data) {
     useBookStore.getState().addBook(data[0]);
+  }
+
+  return data;
+}
+
+// Update a book by id (UPDATE)
+export const updateBook = async (id: number, updatedData: Omit<Book, 'id'>): Promise<any> => {
+  const { data, error } = await supabase
+    .from('books')
+    .update(updatedData)
+    .match({ id });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
+}
+
+// Delete a book by id (DELETE)
+export const deleteBook = async (id: number): Promise<any> => {
+  const { data, error } = await supabase
+    .from('books')
+    .delete()
+    .eq('id', id);
+
+  if (error) {
+    throw new Error(error.message);
   }
 
   return data;

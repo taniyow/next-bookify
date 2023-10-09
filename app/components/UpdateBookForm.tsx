@@ -1,27 +1,27 @@
 'use client';
-import React, { useState } from 'react';
-import { addBook, Book } from '../lib/api';
+import React, { useState, useEffect } from 'react';
+import { Book } from '../lib/api';
 
 type Props = {
-  onAdd: (newBook: Omit<Book, 'id'>) => void;
+  initialBookData: Book;
+  onUpdate: (updatedBook: Book) => void;
 };
 
-export default function AddBookForm({ onAdd }: Props) {
-  const [newBook, setNewBook] = useState({
-    title: '',
-    author: '',
-    publishedDate: '',
-    genre: '',
-  });
+export default function UpdateBookForm({ initialBookData, onUpdate }: Props) {
+  const [updatedBook, setUpdatedBook] = useState<Book>(initialBookData);
+
+  useEffect(() => {
+    setUpdatedBook(initialBookData);
+  }, [initialBookData]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setNewBook({ ...newBook, [name]: value });
+    setUpdatedBook({ ...updatedBook, [name]: value });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onAdd(newBook);
+    onUpdate(updatedBook);
   };
 
   return (
@@ -31,7 +31,7 @@ export default function AddBookForm({ onAdd }: Props) {
           type="text"
           name="title"
           placeholder="Title"
-          value={newBook.title}
+          value={updatedBook.title}
           onChange={handleInputChange}
           className="p-2 border rounded w-full"
         />
@@ -41,7 +41,7 @@ export default function AddBookForm({ onAdd }: Props) {
           type="text"
           name="author"
           placeholder="Author"
-          value={newBook.author}
+          value={updatedBook.author}
           onChange={handleInputChange}
           className="p-2 border rounded w-full"
         />
@@ -50,7 +50,7 @@ export default function AddBookForm({ onAdd }: Props) {
         <input
           type="date"
           name="publishedDate"
-          value={newBook.publishedDate}
+          value={updatedBook.publishedDate}
           onChange={handleInputChange}
           className="p-2 border rounded w-full"
         />
@@ -60,13 +60,13 @@ export default function AddBookForm({ onAdd }: Props) {
           type="text"
           name="genre"
           placeholder="Genre"
-          value={newBook.genre}
+          value={updatedBook.genre}
           onChange={handleInputChange}
           className="p-2 border rounded w-full"
         />
       </div>
-      <button type="submit" className="p-2 mt-4 bg-blue-500 text-white rounded">
-        Add Book
+      <button type="submit" className="p-2 mt-4 bg-green-500 text-white rounded">
+        Update Book
       </button>
     </form>
   )

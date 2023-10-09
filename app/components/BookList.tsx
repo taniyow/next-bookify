@@ -18,14 +18,20 @@ type Book = {
 export default function BookList() {
   const { data, error, isLoading } = useQuery(['books'], fetchBooks);
   const { books } = useBookStore();
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [bookToEdit, setBookToEdit] = useState<Book | null>(null);
+
+  const [isAddModalOpen, setAddModalOpen] = useState(false);
+  const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
+
+  const [isLoadingAdd, setLoadingAdd] = useState(false);
+  const [isLoadingUpdate, setLoadingUpdate] = useState(false);
+  const [isLoadingDelete, setLoadingDelete] = useState(false);
 
   console.log('Data:', data);
   console.log('Error:', error);
 
   const handleAddBook = async (newBook: Omit<Book, 'id'>) => {
+    setLoadingAdd(true);
     try {
       await addBook(newBook);
       await fetchBooks();
@@ -33,22 +39,27 @@ export default function BookList() {
     } catch (error) {
       console.error("An error occurred while adding the book:", error);
     }
+    setLoadingAdd(false);
   };
 
   const handleUpdateBook = async (updatedBook: Book) => {
+    setLoadingUpdate(true);
     if (bookToEdit) {
       try {
         await updateBook(bookToEdit.id, updatedBook);
         await fetchBooks();
-        setModalOpen(false);
+        setUpdateModalOpen(false);
       } catch (error) {
         console.error("An error occurred while updating the book:", error);
       }
     }
+    setLoadingUpdate(false);
   };
 
   const deleteBookById = (id: number) => {
+    setLoadingDelete(true);
     useBookStore.getState().deleteBook(id);
+    setLoadingDelete(false);
   };
 
   const formatDate = (dateString: string) => {
@@ -64,6 +75,7 @@ export default function BookList() {
   }, [data]);
 
   if (isLoading) return <div>Loading...</div>;
+  if (error) return <></>;
 
   return (
     <div className="flex flex-col gap-2 w-full lg:w-1/2">
@@ -85,31 +97,33 @@ export default function BookList() {
             </div>
             <div className="w-[30%] lg:w-auto">
               <button 
-                onClick={() => { setModalOpen(true); setBookToEdit(book); }} 
-                className="w-[5rem] p-2 bg-yellow-500 text-white rounded m-2"
+                onClick={() => { setUpdateModalOpen(true); setBookToEdit(book); }} 
+                disabled={isLoadingUpdate} 
+                className="w-[5rem] p-2 bg-green-500 text-white rounded m-2"
               >
-                Update
+                {isLoadingUpdate ? 'Loading...' : 'Update'}
               </button>
               <button 
                 onClick={() => deleteBookById(book.id)} 
+                disabled={isLoadingDelete} 
                 className="w-[5rem] p-2 bg-red-500 text-white rounded m-2"
               >
-                Delete
+                {isLoadingDelete ? 'Loading...' : 'Delete'}
               </button>
             </div>
           </div>
         ))}
       </div>
       
-      {isModalOpen && bookToEdit ? (
-        <Modal isOpen={isModalOpen} closeModal={() => setModalOpen(false)} title="Update Book">
-          <UpdateBookForm initialBookData={bookToEdit} onUpdate={handleUpdateBook} />
+      {isUpdateModalOpen && bookToEdit ? (
+        <Modal isOpen={isUpdateModalOpen} closeModal={() => setUpdateModalOpen(false)} title="Update Book">
+          <UpdateBookForm initialBookData={bookToEdit} onUpdate={handleUpdateBook} isLoading={isLoadingUpdate}/>
         </Modal>
       ) : null}
 
       {isAddModalOpen ? (
         <Modal isOpen={isAddModalOpen} closeModal={() => setAddModalOpen(false)} title="Add Book">
-          <AddBookForm onAdd={handleAddBook} />
+          <AddBookForm onAdd={handleAddBook} isLoading={isLoadingAdd}/>
         </Modal>
       ): null}
     </div>

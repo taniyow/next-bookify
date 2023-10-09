@@ -1,12 +1,13 @@
 'use client';
 import React, { useState } from 'react';
-import { addBook, Book } from '../lib/api';
+import { Book } from '../lib/api';
 
 type Props = {
+  isLoading: boolean;
   onAdd: (newBook: Omit<Book, 'id'>) => void;
 };
 
-export default function AddBookForm({ onAdd }: Props) {
+export default function AddBookForm({ onAdd, isLoading }: Props) {
   const [newBook, setNewBook] = useState({
     title: '',
     author: '',
@@ -25,7 +26,7 @@ export default function AddBookForm({ onAdd }: Props) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mb-4">
+    <form onSubmit={handleSubmit}>
       <div className="mb-2">
         <input
           type="text"
@@ -66,7 +67,7 @@ export default function AddBookForm({ onAdd }: Props) {
         />
       </div>
       <button type="submit" className="p-2 mt-4 bg-blue-500 text-white rounded">
-        Add Book
+        {isLoading ? 'Adding...' : 'Add Book'}
       </button>
     </form>
   )

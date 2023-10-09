@@ -17,9 +17,9 @@ type Book = {
 type BookState = {
   books: Book[];
   fetchBooks: () => Promise<void>;
-  addBook: (book: Book) => void;
-  updateBook: (id: number, updatedData: Omit<Book, 'id'>) => void;
-  deleteBook: (id: number) => void;
+  addBook: (book: Book) => Promise<void>;
+  updateBook: (id: number, updatedData: Omit<Book, 'id'>) => Promise<void>;
+  deleteBook: (id: number) => Promise<void>;
 };
 
 export const useBookStore = create<BookState>((set, get) => ({
@@ -63,5 +63,4 @@ export const useBookStore = create<BookState>((set, get) => ({
       console.error("An error occurred while deleting the book:", error);
     }
   },
-
 }));

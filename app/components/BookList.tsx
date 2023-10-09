@@ -28,6 +28,7 @@ export default function BookList() {
   const handleAddBook = async (newBook: Omit<Book, 'id'>) => {
     try {
       await addBook(newBook);
+      await fetchBooks();
       setAddModalOpen(false);
     } catch (error) {
       console.error("An error occurred while adding the book:", error);
@@ -38,6 +39,7 @@ export default function BookList() {
     if (bookToEdit) {
       try {
         await updateBook(bookToEdit.id, updatedBook);
+        await fetchBooks();
         setModalOpen(false);
       } catch (error) {
         console.error("An error occurred while updating the book:", error);
